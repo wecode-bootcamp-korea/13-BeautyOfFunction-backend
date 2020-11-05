@@ -32,6 +32,7 @@ class Subscription(models.Model):
     frequency          = models.ForeignKey('Frequency', on_delete=models.CASCADE)
     start_date         = models.DateField(auto_now_add=True)
     next_delevery_date = models.DateField()
+    order              = models.ForeignKey('cart.Order', on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'subscriptions'
