@@ -6,14 +6,14 @@ from quiz.models    import Quiz
 class Order(models.Model):
     user            = models.ForeignKey('user.User', on_delete = models.CASCADE)
     order_number    = models.CharField(max_length = 20, null = True)
-    created_at      = models.DateTimeField(auto_now = True, auto_now_add = True, null = True)
+    updated_at      = models.DateTimeField(auto_now = True, null = True) 
     order_status    = models.ForeignKey('OrderStatus', on_delete = models.CASCADE)
 
     class meta :
         db_table = 'orders'
 
 class OrderStatus(models.Model):
-    status = models.CharField(max_length = 20, null = True)
+    status = models.CharField(max_length = 20)
 
     class meta :
         db_table = 'order_statuses'
