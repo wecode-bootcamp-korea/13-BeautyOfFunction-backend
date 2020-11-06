@@ -9,13 +9,13 @@ class Order(models.Model):
     updated_at      = models.DateTimeField(auto_now = True, null = True) 
     order_status    = models.ForeignKey('OrderStatus', on_delete = models.CASCADE)
 
-    class meta :
+    class Meta :
         db_table = 'orders'
 
 class OrderStatus(models.Model):
     status = models.CharField(max_length = 20)
 
-    class meta :
+    class Meta :
         db_table = 'order_statuses'
 
 class OrderItem(models.Model):
@@ -26,5 +26,5 @@ class OrderItem(models.Model):
     shampoo_color       = models.ForeignKey('product.Color', on_delete = models.CASCADE, null = True, related_name = 'shampoo_color')
     conditioner_color   = models.ForeignKey('product.Color', on_delete = models.CASCADE, null = True, related_name = 'conditioner_color')
 
-    class meta:
+    class Meta:
         db_table = 'order_items'
