@@ -16,7 +16,7 @@ class OrderStatus(models.Model):
     status = models.CharField(max_length = 20)
 
     class Meta :
-        db_table = 'order_statuses'
+        db_table = 'orders_statuses'
 
 class OrderItem(models.Model):
     order               = models.ForeignKey('Order', on_delete = models.CASCADE)
@@ -27,4 +27,4 @@ class OrderItem(models.Model):
     conditioner_color   = models.ForeignKey('product.Color', on_delete = models.CASCADE, null = True, related_name = 'conditioner_color')
 
     class Meta:
-        db_table = 'order_items'
+        db_table = 'orders_items'
