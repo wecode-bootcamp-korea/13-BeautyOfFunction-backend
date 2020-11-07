@@ -6,9 +6,9 @@ class Category(models.Model):
     ingredients_image_url   = models.URLField(max_length = 2000)
     recommended_image_url   = models.URLField(max_length = 2000)
     great_for_image_url     = models.URLField(max_length = 2000)
-    ingredients             = models.CharField(max_length = 300)
-    recommended             = models.CharField(max_length = 300)
-    great_for               = models.CharField(max_length = 300)
+    ingredients             = models.CharField(max_length = 1000)
+    recommended             = models.CharField(max_length = 1000)
+    great_for               = models.CharField(max_length = 1000)
     color                   = models.ManyToManyField('Color', through = 'CategoryColor')
 
     class Meta :
