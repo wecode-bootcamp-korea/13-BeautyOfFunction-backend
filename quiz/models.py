@@ -6,6 +6,7 @@ class Quiz(models.Model):
     scalp_moisture = models.ForeignKey('ScalpMoisture', on_delete=models.CASCADE)
     fragrance      = models.ForeignKey('Fragrance', on_delete=models.CASCADE)
     formula_name   = models.CharField(max_length=10)
+    silicone_free  = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'quizzes'
@@ -30,7 +31,6 @@ class ScalpMoisture(models.Model):
 
 class HairGoal(models.Model):
     function      = models.CharField(max_length=20)
-    silicone_free = models.BooleanField(default=False)
     quiz          = models.ManyToManyField('Quiz', through='QuizHairGoal')
 
     class Meta:
