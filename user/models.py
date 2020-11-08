@@ -2,7 +2,7 @@ from django.db          import models
 from creditcards.models import CardNumberField, CardExpiryField
 
 class User(models.Model):
-    email           = models.EmailField(max_length=254, unique=True)
+    email           = models.EmailField(max_length=254, unique=True, null=True)
     password        = models.CharField(max_length=1000, null=True)
     first_name      = models.CharField(max_length=45, null=True)
     last_name       = models.CharField(max_length=45, null=True)
