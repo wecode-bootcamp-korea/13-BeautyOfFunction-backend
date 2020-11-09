@@ -3,6 +3,7 @@ from django.db import models
 class Category(models.Model):
     name                    = models.CharField(max_length = 45)
     description             = models.TextField()
+    short_description       = models.CharField(max_length = 300)
     ingredients_image_url   = models.URLField(max_length = 2000)
     recommended_image_url   = models.URLField(max_length = 2000)
     great_for_image_url     = models.URLField(max_length = 2000)
