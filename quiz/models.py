@@ -46,7 +46,7 @@ class QuizHairGoal(models.Model):
 
 class Fragrance(models.Model):
     fragrance          = models.CharField(max_length=30)
-    fragrance_image    = models.URLField(max_length=1000)
+    fragrance_image    = models.URLField(max_length=1000, null=True)
 
     class Meta:
         db_table = 'fragrances'
