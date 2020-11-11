@@ -9,7 +9,8 @@ from django.http  import JsonResponse
 from django.views import View
 
 from my_settings import SECRET, ALGORITHM
-from user.models import User
+from user.models import User, PaymentMethod
+from user.utils  import login_required
 
 class SignUpView(View):
     def post(self, request):
@@ -56,8 +57,7 @@ class LoginView(View):
 
                 return JsonResponse({"Authorization": access_token}, status=200)
 
-            else:
-                return JsonResponse({"Message": "INCORRECT_EMAIL_OR_PASSWORD"}, status=401)
+            return JsonResponse({"Message": "INCORRECT_EMAIL_OR_PASSWORD"}, status=401)
 
         except User.DoesNotExist:
             return JsonResponse({"Message": "INCORRECT_EMAIL_OR_PASSWORD"}, status=401)
@@ -81,3 +81,36 @@ class KakaoLoginView(View):
             return JsonResponse({"Authorization": access_token}, status=200)
 
         return JsonResponse({"Message": "INVALID_TOKEN"}, status=401)
+
+class MyPageView(View):
+    @login_required
+    def get(self, request):
+        user_id = request.user.id
+
+        user = User.objects.get(id=user_id)
+        f_name = user.first_name if user.first_name else ''
+        l_name = user.last_name if user.last_name else ''
+        user_info = {
+            "name"          : f"{f_name} {l_name}",
+            "email"         : user.email if user.email else '',
+            "address1"      : user.address1 if user.address1 else '',
+            "address2"      : user.address2 if user.address2 else '',
+            "country"       : user.country if user.country else '',
+            "city"          : user.city if user.city else '',
+            "state_province": user.state_province if user.state_province else '',
+            "zip_code"      : user.zip_code if user.zip_code else '',
+            "phone_number"  : user.phone_number if user.phone_number else ''
+        }
+        payment_method = {}
+
+        if PaymentMethod.objects.filter(user_id=user_id).exists():
+            cc_info = PaymentMethod.objects.get(user_id=user_id)
+            payment_method = {
+                "cc_number": cc_info.cc_number[-4:],
+                "cc_expiry": cc_info.cc_expiry
+            }
+
+        return JsonResponse({
+            "user_info": user_info,
+            "payment_method": payment_method
+        }, status=200)

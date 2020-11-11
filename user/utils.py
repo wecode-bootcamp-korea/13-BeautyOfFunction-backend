@@ -5,13 +5,13 @@ import requests
 from django.http import JsonResponse
 
 from .models     import User
-from my_setitngs import SECRET, ALGORITHM
+from my_settings import SECRET, ALGORITHM
 
 def login_required(f):
     def wrapper(self, request, *args, **kwargs):
 
-        if "Authorization" not in requset.headers:
-            return JsonResponse({"Message": "TOKEN_DOES_NOT_EXISTS"}, status=401)
+        if "Authorization" not in request.headers:
+            return JsonResponse({"Message": "TOKEN_DOES_NOT_EXIST"}, status=401)
 
         access_token = request.headers["Authorization"]
 
