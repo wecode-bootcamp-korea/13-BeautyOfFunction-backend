@@ -6,7 +6,7 @@ from django.test   import TestCase, Client
 from unittest.mock import patch, MagicMock
 
 from my_settings import SECRET, ALGORITHM
-from user.models import User
+from user.models import User, PaymentMethod
 
 client = Client()
 
@@ -113,6 +113,43 @@ class kakaoLoginTest(TestCase):
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response.json(), {"Message": "INVALID_TOKEN"})
 
+class MyPageTest(TestCase):
+    def setUp(self):
+        hashed_password = bcrypt.hashpw('test1234!'.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        User.objects.create(email="test@test.com", password=hashed_password, first_name="Jane", last_name="Doe", country="South Korea", phone_number="123-1234")
+
+        user = User.objects.get(email="test@test.com")
+        PaymentMethod.objects.create(user_id=user.id, cc_number="1234-5678-1234-5678", cc_expiry="01/2022")
+
+    def tearDown(self):
+        User.objects.get(email="test@test.com").delete()
+
+    def test_mypage_success(self):
+        login_response = client.post('/account/login', {'email': 'test@test.com', 'password':'test1234!'}, content_type = 'application/json')
+        token          = login_response.json()["Authorization"]
+        header         = {"HTTP_Authorization" : token}
+        response       = client.get('/account/mypage', **header, content_type = 'application/json')
+
+        json_response = {
+            "user_info": {
+                "name"          : "Jane Doe",
+                "email"         : "test@test.com",
+                "address1"      : "",
+                "address2"      : "",
+                "country"       : "South Korea",
+                "city"          : "",
+                "state_province": "",
+                "zip_code"      : "",
+                "phone_number"  : "123-1234"
+            },
+            "payment_method": {
+                "cc_number": "5678",
+                "cc_expiry": "2022-01-31"
+            }
+        }
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), json_response)
 
 if __name__ == '__main__':
     unittest.main()
