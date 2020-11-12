@@ -2,6 +2,7 @@ from django.db      import models
 from user.models    import User
 from product.models import Product, ProductTemplate, Color
 from quiz.models    import Quiz
+from review.models  import Review
 
 class Order(models.Model):
     user            = models.ForeignKey('user.User', on_delete = models.CASCADE)
@@ -25,6 +26,7 @@ class OrderItem(models.Model):
     product_template    = models.ForeignKey('product.ProductTemplate', on_delete = models.CASCADE, null = True)
     shampoo_color       = models.ForeignKey('product.Color', on_delete = models.CASCADE, null = True, related_name = 'shampoo_color')
     conditioner_color   = models.ForeignKey('product.Color', on_delete = models.CASCADE, null = True, related_name = 'conditioner_color')
+    review              = models.ForeignKey('review.Review', on_delete = models.CASCADE, null = True)
 
     class Meta:
         db_table = 'orders_items'
