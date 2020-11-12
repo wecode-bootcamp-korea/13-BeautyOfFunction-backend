@@ -8,7 +8,6 @@ class Review(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True)
     user       = models.ForeignKey('user.User', on_delete=models.CASCADE)
-    order_item = models.ForeignKey('cart.OrderItem', on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'reviews'

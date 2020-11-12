@@ -5,6 +5,8 @@ from django.http    import JsonResponse
 from django.views   import View
 
 from product.models import Category, DetailImage, Product
+from review.models import Review
+from cart.models import Order,OrderStatus,OrderItem
 
 class CategoriesView(View):
 
@@ -12,7 +14,7 @@ class CategoriesView(View):
 
         try :
             categories = Category.objects.all()
-
+ 
             item_list = [{
                 'category_id' : category.id,
                 'image' : category.detailimage_set.all()[0].image_url,
@@ -37,7 +39,7 @@ class CategoryView(View):
                 'image'             : [{"src": detail_image.image_url, 
                                         "id": detail_image.id} 
                                        for detail_image in item.detailimage_set.all()],
-                'name'              : "custom"+ "" + item.name,
+                'name'              : "custom"+ " " + item.name,
                 'description'       : item.description,
                 'ingredients'       : item.ingredients,
                 'ingredients_url'   : item.ingredients_image_url,
@@ -47,7 +49,23 @@ class CategoryView(View):
                 'great_for_url'     : item.great_for_image_url
             }
 
-            return JsonResponse({'detail_list' : result}, status=200)
+
+            if category_id == 1 :
+                order_list = OrderItem.objects.filter(product_id__lte=4).select_related('review')
+
+            else : 
+                product_id = Product.objects.get(category_id = category_id).id
+                order_list = OrderItem.objects.filter(product_id = product_id)
+
+            review = [{'name' : item.review.name,
+                       'rating' : item.review.rating,
+                       'title' : item.review.title,
+                       'comment' : item.review.comment,
+                       'created_at' : item.review.created_at
+                      }for item in order_list]
+
+            return JsonResponse({'detail_list' : result, 
+                                 'review_list' : review}, status=200)
 
         except Category.DoesNotExist :
             return JsonResponse({'MESSAGE' : 'Category does not exist'}, status=400)
