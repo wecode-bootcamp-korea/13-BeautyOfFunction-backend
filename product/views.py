@@ -49,7 +49,7 @@ class CategoryView(View):
                 'great_for_url'     : item.great_for_image_url
             }
 
-            if category_id == 1 :
+            if category_id == 1 or category_id ==2 :
                 order_list = OrderItem.objects.filter(product_id__lte=4).select_related('review')
 
             else : 
