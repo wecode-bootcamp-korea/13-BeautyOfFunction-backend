@@ -5,8 +5,8 @@ from django.http    import JsonResponse
 from django.views   import View
 
 from product.models import Category, DetailImage, Product
-from review.models import Review
-from cart.models import Order,OrderStatus,OrderItem
+from review.models  import Review
+from cart.models    import Order,OrderStatus,OrderItem
 
 class CategoriesView(View):
 
@@ -48,7 +48,6 @@ class CategoryView(View):
                 'great_for'         : item.great_for,
                 'great_for_url'     : item.great_for_image_url
             }
-
 
             if category_id == 1 :
                 order_list = OrderItem.objects.filter(product_id__lte=4).select_related('review')
