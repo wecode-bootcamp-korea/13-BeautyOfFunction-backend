@@ -72,6 +72,7 @@ class KakaoLoginView(View):
         headers      = {"Authorization": f"Bearer {access_token}"}
         url          = "https://kapi.kakao.com/v2/user/me"
         response     = requests.get(url, headers=headers, verify=False)
+        print(response.json())
         user         = response.json()
 
         if user.get('id'):
