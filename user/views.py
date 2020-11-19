@@ -72,7 +72,6 @@ class KakaoLoginView(View):
         headers      = {"Authorization": f"Bearer {access_token}"}
         url          = "https://kapi.kakao.com/v2/user/me"
         response     = requests.get(url, headers=headers, verify=False)
-        print(response.json())
         user         = response.json()
 
         if user.get('id'):
@@ -88,9 +87,10 @@ class MyPageView(View):
     def get(self, request):
         user_id = request.user.id
 
-        user = User.objects.get(id=user_id)
+        user   = User.objects.get(id=user_id)
         f_name = user.first_name if user.first_name else ''
         l_name = user.last_name if user.last_name else ''
+
         user_info = {
             "name"          : f"{f_name} {l_name}",
             "email"         : user.email if user.email else '',
